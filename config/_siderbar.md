@@ -1,4 +1,7 @@
 - [基础知识](./base/index.md)
   - [1.go](./base/index.md)
   - [2.n 知识](./base/index.md)
+- 中间件
+  - [Redis-基础](../中间件/Redis/1-基础知识.md)
+  - Redis-进阶
 - [计划](./plan/index.md)
