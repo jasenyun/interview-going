@@ -3,5 +3,5 @@
   - [2.n 知识](./base/index.md)
 - 中间件
   - [Redis-基础](../中间件/Redis/1-基础知识.md)
-  - Redis-进阶
+  - [Redis-进阶](../%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis/2-%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86.md)
 - [计划](./plan/index.md)
