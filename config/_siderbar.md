@@ -3,5 +3,9 @@
   - [2.n 知识](./base/index.md)
 - 中间件
   - [Redis-基础](../中间件/Redis/1-基础知识.md)
-  - [Redis-进阶](../%E4%B8%AD%E9%97%B4%E4%BB%B6/Redis/2-%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86.md)
+  - [Redis-进阶](../中间件/Redis/2-进阶知识.md)
+  - [Redis-持久化](../中间件/Redis/3-深入原理.md)
+  - [Redis-主从复制](../中间件/Redis/3-主从复制.md)
+  - [Redis-哨兵模式](../中间件/Redis/3-哨兵模式.md)
+  - [Redis-常见面试题](../中间件/Redis/4-常见面试题.md)
 - [计划](./plan/index.md)
