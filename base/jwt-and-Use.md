@@ -98,35 +98,35 @@ github.com/golang-jwt/jwt/v4
 ```go
 // 自定义 claim 其中包含 jwt 提供的标准 claims 即7个参数
 type MyClaims struct {
-	uid  string
-	name string
-	jwt.RegisteredClaims
+    uid  string
+    name string
+    jwt.RegisteredClaims
 }func GenerateToken(userId string, expired time.Duration) (string, error) {
-	expire := time.Now().Add(expired)
+    expire := time.Now().Add(expired)
 
-	claims := MyClaims{
-		userId,
-		"tokentest",
-		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(expire),
-			Issuer:    "test",
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    claims := MyClaims{
+        userId,
+        "tokentest",
+        jwt.RegisteredClaims{
+            ExpiresAt: jwt.NewNumericDate(expire),
+            Issuer:    "test",
+        },
+    }
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	return token.SignedString([]byte(SecretKey))
+    return token.SignedString([]byte(SecretKey))
 }
 
 func ParseToken(tokenString string) interface{} {
-	var token, err = jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
-		return []byte(SecretKey), nil
-	})
-	if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
-		return claims
-	} else {
-		fmt.Println(err)
-		return nil
-	}
+    var token, err = jwt.ParseWithClaims(tokenString, &MyClaims{}, func(token *jwt.Token) (interface{}, error) {
+        return []byte(SecretKey), nil
+    })
+    if claims, ok := token.Claims.(*MyClaims); ok && token.Valid {
+        return claims
+    } else {
+        fmt.Println(err)
+        return nil
+    }
 }
 ```
 
@@ -134,33 +134,31 @@ func ParseToken(tokenString string) interface{} {
 
 ```go
 APIV1User := r.Group("/api/v1/user")
-	{
-		APIV1User.Use(LoginRequest) // 路由中间件，拦截/api/v1/user 下所有请求
-		APIV1User.GET("/", GetUserList)
-	}
+    {
+        APIV1User.Use(LoginRequest) // 路由中间件，拦截/api/v1/user 下所有请求
+        APIV1User.GET("/", GetUserList)
+    }
 
 
 // 登录校验拦截
 func LoginRequest(ctx *gin.Context) {
-	header := ctx.Request.Header
-	if header == nil {
+    header := ctx.Request.Header
+    if header == nil {
 
-	}
-	auth := header["Authorization"]
-	if auth == nil {
-		fmt.Errorf("结果错误，返回")
-		ctx.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "缺少authorization"})
-		ctx.Abort()
-		return
-	} else {
-		utils.ParseToken(auth[0])
+    }
+    auth := header["Authorization"]
+    if auth == nil {
+        fmt.Errorf("结果错误，返回")
+        ctx.JSON(http.StatusBadRequest, gin.H{"code": 400, "message": "缺少authorization"})
+        ctx.Abort()
+        return
+    } else {
+        utils.ParseToken(auth[0])
 
-		ctx.Next()
-	}
+        ctx.Next()
+    }
 }
 ```
-
-
 
 参考资料：
 
