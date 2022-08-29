@@ -1,0 +1,118 @@
+Java基础-String 的源码分析
+
+首先在编辑器上按下 F12，查看 String 的源代码：
+
+```java
+public final class String
+    implements java.io.Serializable, Comparable<String>, CharSequence,
+               Constable, ConstantDesc {
+    // 用于存储字符串的值
+    private final byte[] value;
+    // 用于对值中的字节进行编码的编码标识符。
+    private final byte coder;
+    // 缓存字符串的 hash code
+    private int hash; // Default to 0
+
+}
+```
+
+ String 的内部存储结构是` byte[] value` 字节数组。在 Java 9 之前 String 的存储是 char 数组  `private final char value`。使用字节数组存储占用的内存更少，操作性能更高。
+
+## 使用 final 修饰
+
+String 类是使用 final 修饰的。关键字 final 修饰作用是让类不可继承。这样的好处有两个：
+
+- 更加安全。当你在调用一些系统级操作指令前，可能会有一系列校验，将 String 设置为可变类的话，可能会发生校验后值发生改变从而引起系统崩溃。所以将 String 设计为不可变类
+
+- 更加高效。因为 final 可以缓存结果，若 String 设计为可变类，这样在传参时需要重新拷贝新值进行传参，这样会导致性能损失
+
+只有字符串不可变，才能更好实现字符串常量池。字符串常量池可缓存字符串，提高程序的运行效率。
+
+## equals () 比较字符是否相等
+
+```java
+    public boolean equals(Object anObject) {
+       // 对象引用相同直接返回 true
+        if (this == anObject) {
+            return true;
+        }
+        return (anObject instanceof String aString)
+                && (!COMPACT_STRINGS || this.coder == aString.coder)
+                && StringLatin1.equals(value, aString.value);
+    }
+```
+
+equals 方法需要传递一个 Object 类型的参数，比较时先通过 instanceof 判断是否为 String 类型。比较的是存储字符串的字节数组的值，所有都相等返回true ，否则返回false。
+
+还有一个和 equals() 比较类似的方法 equalsIgnoreCase()，它是用于忽略字符串的大小写之后进行字符串对比。
+
+**== 和 equals 的区别**
+
+== 也是比较值，这和 equals 的区别是：== 比较的是值，更多是应用在“值结果“的比较。但是对于引用类型来说，在比较引用地址的是否相同时，需要使用 equals 来比较。
+
+## compareTo() 比较两个字符串
+
+compareTo() 方法用于比较两个字符串，返回的结果为 int 类型的值。源码如下：
+
+```java
+    public int compareTo(String anotherString) {
+        byte v1[] = value;
+        byte v2[] = anotherString.value;
+        byte coder = coder();
+        if (coder == anotherString.coder()) {
+            return coder == LATIN1 ? StringLatin1.compareTo(v1, v2)
+                                   : StringUTF16.compareTo(v1, v2);
+        }
+        return coder == LATIN1 ? StringLatin1.compareToUTF16(v1, v2)
+                               : StringUTF16.compareToLatin1(v1, v2);
+     }
+```
+
+所以可以看到，比较基于字符串中每个字符的 Unicode 值。
+
+equals 和 compareTo 都是用于比较字符串的，不同的是 ：
+
+- equals 接收 Object 类型的参数，而 compareto 只能接收 String类型的参数
+
+- equals 返回值是 Boolean，compareTo 返回值是 int
+
+## String 的其他方法
+
+indexOf()：查询字符串首次出现的下标位置
+lastIndexOf()：查询字符串最后出现的下标位置
+contains()：查询字符串中是否包含另一个字符串
+toLowerCase()：把字符串全部转换成小写
+toUpperCase()：把字符串全部转换成大写
+length()：查询字符串的长度
+trim()：去掉字符串首尾空格
+replace()：替换字符串中的某些字符
+split()：把字符串分割并返回字符串数组
+join()：把字符串数组转为字符串
+
+## 其他 String 问题
+
+### String 和 StringBuilder、StringBuffer 的区别
+
+- String 是不可变的，所以字符串在拼接时就需要重新创建 String 来接收拼接后的字符串，会导致性能低。
+
+- StringBuffer 类型，它提供了 append 和 insert 方法可用于字符串的拼接，而且它使用 synchronized 来保证线程安全。
+
+- StringBuilder 类型，同样提供了 append 和 insert 方法可用于字符串的拼接，但没有使用 synchronized 来修饰，所以性能比 StringBuffer 更高些。
+
+所以性能上: StringBuilder > StringBuffer > String
+
+### String 和 JVM
+
+String 的创建在日常开发中很常用，创建都需要耗费大量的空间和时间，从而会影响系统的性能。所以Java 设计者在 JVM 为 String 提供了字符串常量池来提高性能。
+
+创建 String 的方式有两种：
+
+```java
+String s1 = new String("Java");
+String s2 = s1.intern();
+String s3 = "Java";
+```
+
+- `new String("")`方式，会现在堆上创建字符串对象，然后再去常量池中查询该字符串，若已存在则将引用的值指向此字符串，否则先在常量池创建此字符串
+
+- 直接赋值，会先去常量池查找，若已存在则把引用地址指向该值，否则会先创建再引用。
