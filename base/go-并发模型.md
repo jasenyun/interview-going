@@ -1,7 +1,5 @@
 Go 并发模型 GMP
 
-
-
 单进程时，CPU一次只能处理一个进程，导致所有的任务都是串行的，出现进程阻塞的话就会使得其他都得等待。后来操作系统开始支持多进程并发，进程阻塞时就会切换其他等待的进程，有效利用CPU 。
 
 进程拥有很多资源，进程的创建，切换，销毁都会占用 CPU 很长时间，因其要对进程进行调度。后来提出线程，但同样引来很多问题：如锁，竞争冲突等
@@ -76,7 +74,7 @@ type p struct {
     runqhead uint32
     runqtail uint32
     runq     [256]guintptr
-    
+
     runnext guintptr // 一个比runq优先级更高的runnable G
 
     // 状态为dead的G链表，在获取G时会从这里面获取
@@ -103,10 +101,6 @@ type p struct {
 
 - runtime.Gosched()
 
-
-
 参考资料：
 
 - https://www.yuque.com/aceld/golang/srxd6d
-
-

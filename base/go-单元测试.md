@@ -30,12 +30,12 @@ func Add(){
 
 # main_test.go
 func TestAdd(t *testing.T) {
-	result := Add()
-	if result == 3 {
-		println("success")
-	} else {
-		println("error")
-	}
+    result := Add()
+    if result == 3 {
+        println("success")
+    } else {
+        println("error")
+    }
 }
 ```
 
@@ -81,9 +81,9 @@ go tool cover -html=main.cover -o=main.html
 
 ```go
 func BenchmarkAdd(b *testing.B) {
-	for i := 0; i < b.N; i++ {
-		Add()
-	}
+    for i := 0; i < b.N; i++ {
+        Add()
+    }
 }
 ```
 
@@ -107,17 +107,17 @@ go test -bench=. -benchtime=3s ./
 
 进行基准测试之前，需要进行一些数据准备，如构建测试数据，而这部分准备工作不属于性能测试计算范围内所以需要排除在外。通过使用充值计数器 ResetTimer重新计算。也支持使用 StartTimer 和 StopTimer 方法，控制何时开始计时何时结束。
 
--  内存统计
+- 内存统计
 
 内存统计主要是统计每次操作分配内存的次数和分配的字节数。使用 ReportAllocs() 方法
 
 ```go
 func BenchmarkAdd(b *testing.B) {
-	b.ResetTimer() // 重置计时时间
+    b.ResetTimer() // 重置计时时间
     b.ReportAllocs() // 内存统计
-	for i := 0; i < b.N; i++ {
-		Add()
-	}
+    for i := 0; i < b.N; i++ {
+        Add()
+    }
 }
 ```
 
@@ -137,11 +137,11 @@ func BenchmarkAdd(b *testing.B) {
 
 ```go
 func BenchmarkAdd(b *testing.B) {
-	b.RunParallel(func(pb *testing.PB) {
-		for pb.Next() {
-			Add()
-		}
-	})
+    b.RunParallel(func(pb *testing.PB) {
+        for pb.Next() {
+            Add()
+        }
+    })
 }
 ```
 
@@ -150,12 +150,6 @@ func BenchmarkAdd(b *testing.B) {
 ## CI/CD 的自动化测试
 
 在CI/CD 加入单元测试覆盖率，当覆盖率达到一定值时才允许通过，然后继续编译部署。通过加入单元测试节点
-
-
-
-
-
-
 
 参考资料：
 

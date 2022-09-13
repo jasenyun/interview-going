@@ -1,7 +1,5 @@
 go 并发数量的控制
 
-
-
 goroutine 是轻量级线程，调度由 Go 运行时进行管理的。Go 语言的并发控制主要使用关键字 go 开启协程 goroutine。Go 协程（Goroutine）之间通过信道（channel）进行通信，简单的说就是多个协程之间通信的管道。信道可以防止多个协程访问共享内存时发生资源争抢的问题。语法格式：
 
 ```go
@@ -18,16 +16,16 @@ go func(参数列表){
 
 ```go
 func testRoutine() {
-	var wg sync.WaitGroup
-	for i := 0; i < math.MaxInt32; i++ {
-		wg.Add(1)
-		go func(i int) {
-			defer wg.Done()
-			fmt.Printf("并发数量：%d/n", i)
-			time.Sleep(time.Second)
-		}(i)
-	}
-	wg.Wait()
+    var wg sync.WaitGroup
+    for i := 0; i < math.MaxInt32; i++ {
+        wg.Add(1)
+        go func(i int) {
+            defer wg.Done()
+            fmt.Printf("并发数量：%d/n", i)
+            time.Sleep(time.Second)
+        }(i)
+    }
+    wg.Wait()
 }
 ```
 
@@ -43,17 +41,17 @@ sync 同步机制
 
 ```go
 func testRoutine() {
-	var wg = sync.WaitGroup{}
+    var wg = sync.WaitGroup{}
 
-	taskCount := 5 // 指定并发数量
-	for i := 0; i < taskCount; i++ {
-		wg.Add(1)
-		go func(i int) {
-			fmt.Println("go func ", i)
-			wg.Done()
-		}(i)
-	}
-	wg.Wait()
+    taskCount := 5 // 指定并发数量
+    for i := 0; i < taskCount; i++ {
+        wg.Add(1)
+        go func(i int) {
+            fmt.Println("go func ", i)
+            wg.Done()
+        }(i)
+    }
+    wg.Wait()
 }
 ```
 
@@ -61,20 +59,20 @@ func testRoutine() {
 
 ```go
 func testRoutine() {
-	task_chan := make(chan bool, 3) //100 为 channel长度
-	wg := sync.WaitGroup{}
-	defer close(task_chan)
-	for i := 0; i < math.MaxInt; i++ {
-		wg.Add(1)
+    task_chan := make(chan bool, 3) //100 为 channel长度
+    wg := sync.WaitGroup{}
+    defer close(task_chan)
+    for i := 0; i < math.MaxInt; i++ {
+        wg.Add(1)
         fmt.Println("go func ", i)
-		task_chan <- true
-		go func() {
-				<-task_chan
-				defer wg.Done()
-		}()
-	}
-	
-	wg.Wait()
+        task_chan <- true
+        go func() {
+                <-task_chan
+                defer wg.Done()
+        }()
+    }
+
+    wg.Wait()
 }
 ```
 
@@ -85,8 +83,6 @@ func testRoutine() {
 - 协程任务执行完成后就释放缓冲区
 
 - 等待所有的并发都处理结束后则函数结束。其实可以不使用 sync.WaitGroup。因使用 channel 控制并发处理的任务数量可以不用使用等待并发处理结束。
-
-
 
 参考资料：
 
