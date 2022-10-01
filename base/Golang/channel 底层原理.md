@@ -102,8 +102,6 @@ type Handler struct {
 }
 ```
 
-
-
 ### 应用场景
 
 channel 主要运用在数据流动的场景中：
@@ -152,8 +150,6 @@ type hchan struct {
 - lock 是互斥锁
 
 - recvq 和 sendq 是接收和发送的协程队列
-
-
 
 参考资料：
 

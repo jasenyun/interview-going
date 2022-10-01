@@ -38,7 +38,6 @@ repos:
       - id: no-go-testing
       - id: golangci-lint
       - id: go-unit-tests
-
 ```
 
 - repos  一系列仓库映射
@@ -82,10 +81,6 @@ hook 脚本配置完成后，需要执行命令 `pre-commit install` 启动 hook
 ```shell
 npm install -g @commitlint/cli @commitlint/config-conventional
 ```
-
-
-
-
 
 参考资料：
 
