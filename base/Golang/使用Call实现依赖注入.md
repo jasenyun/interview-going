@@ -35,8 +35,6 @@ func GeneratorToken(ctx context.Context, id string)(string, error){
 reg :=call.NewReg() // 获取新的注册表
 
 reg.AddFunction("GeneratorToken", GeneratorToken,"context","id") // 向注册表中加入函数和参数
-
-
 ```
 
 现在使用 GeneratorToken 函数时：
@@ -59,10 +57,6 @@ result, err := reg.CallWithArgs("GeneratorToken",context.Background(),"id_237829
 ```
 
 如果函数的参数长度和类型不匹配，它将返回错误。
-
-
-
-
 
 参考资料：
 
